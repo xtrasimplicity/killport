@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#################################################
+# Lists the process running on the passed port  #
+# and then confirms whether you want to kill it #
+#################################################
+#Get the port that the user passed in
+port=$1
+
+if [[ ${#port} == 0 ]]; then
+ echo "Kills a service running on the specified port."
+ echo "usage: killport PORT"
+ exit;
+fi
+
+# Get the details for this port
+lsofout=`lsof -Pnl +M -i4 | grep $port`
+procname=`$lsofout | awk '{print $1}'`
+pid=`$lsofout | awk '{print $2}'`
+
+if [[ ${#procname} == 0 ]]; then
+ echo "There does not appear to be any processes running on this port."
+ exit;
+fi
+
+# Let the user know which process is running on this port
+echo "It appears that $procname is running on port $port."
+read -p "Would you like to kill it? (yn): " yn
+
+case $yn in
+  [Yy]* ) kill $pid;;
+  [Nn]* ) exit;;
+  * ) echo "Please select a valid option.";;
+esac
