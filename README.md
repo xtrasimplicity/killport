@@ -2,10 +2,11 @@
 Simple bash script to kill a process which uses the specified port.
 
 ## Installation
-Simply copy ``killport`` to a directory of your choice, say, ``/opt/scripts/killport``, and then add this path to your $PATH. i.e.
+Simply make a directory in which to store the script, i.e. ``/opt/scripts/killport``, clone this repository therein, set the script to executable, and add this path your $PATH environment variable, as follows:
 ```
 mkdir -p /opt/scripts/killport && cd /opt/scripts/killport 
 git clone https://github.com/xtrasimplicity/killport.git .
+chmod +x killport
 echo 'export PATH="$PATH:/opt/scripts/killport"' >> ~/.bashrc
 source ~/.bashrc
 ```
