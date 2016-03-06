@@ -12,22 +12,19 @@ if [[ ${#port} == 0 ]]; then
  exit;
 fi
 
-# Get the details for this port
-lsofout=`lsof -Pnl +M -i4 | grep $port`
-procname=`$lsofout | awk '{print $1}'`
-pid=`$lsofout | awk '{print $2}'`
+# Get everything running on this port
+lsofcmd="lsof -i :$port"
 
-if [[ ${#procname} == 0 ]]; then
- echo "There does not appear to be any processes running on this port."
- exit;
-fi
+# echo the command, and then iterate through each line of the output
+counter=0
+$(echo $lsofcmd) | while read -r line; do
+  counter=$((counter+1)) # We want to skip the first line, as the first line is the column headers, from lsof
 
-# Let the user know which process is running on this port
-echo "It appears that $procname is running on port $port."
-read -p "Would you like to kill it? (yn): " yn
+  if [[ $counter > 1 ]]; then
+    procname=$(echo $line | awk '{print $1}')
+    pid=$(echo $line | awk '{print $2}')
 
-case $yn in
-  [Yy]* ) kill $pid;;
-  [Nn]* ) exit;;
-  * ) echo "Please select a valid option.";;
-esac
+    echo "Killing $procname with PID: $pid"
+    kill $pid;
+  fi
+done
