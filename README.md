@@ -18,9 +18,6 @@ Simply run killport as follows:
 
 i.e. ``killport 3000``
 
-## Limitations
-- Simultaneously terminating multiple processes with the same port number is currently not supported.
-
 ## Contributing
 
 1. Fork it!
