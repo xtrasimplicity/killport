@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 #################################################
-# Lists the process running on the passed port  #
-# and then confirms whether you want to kill it #
+# Kills the process running on the passed port  #
 #################################################
 #Get the port that the user passed in
 port=$1
