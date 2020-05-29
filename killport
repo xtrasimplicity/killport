@@ -24,6 +24,6 @@ $(echo $lsofcmd) | while read -r line; do
     pid=$(echo $line | awk '{print $2}')
 
     echo "Killing $procname with PID: $pid"
-    kill $pid;
+    kill -9 $pid;
   fi
 done
