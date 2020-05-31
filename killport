@@ -2,13 +2,32 @@
 ####################################################
 # Kills the process running on the specified port  #
 ####################################################
-#Get the port that the user passed in
+sendSigKill=false
+
+renderHelp() {
+ echo "Kills a service running on the specified port."
+ echo "Usage: killport [OPTIONS] PORT"
+ echo "Options:"
+ echo "   -f    Forcefully kill the process by issuing a SIGKILL, rather than SIGTERM."
+ exit 0 
+}
+
+while getopts ":hf" opt; do
+  case ${opt} in
+    h )
+      renderHelp
+      ;;
+    f )
+      sendSigKill=true
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
 port=$1
 
 if [[ ${#port} == 0 ]]; then
- echo "Kills a service running on the specified port."
- echo "usage: killport PORT"
- exit;
+ renderHelp
 fi
 
 # Get everything running on this port
@@ -22,8 +41,15 @@ $(echo $lsofcmd) | while read -r line; do
   if [[ $counter > 1 ]]; then
     procname=$(echo $line | awk '{print $1}')
     pid=$(echo $line | awk '{print $2}')
+    killFlags=''
+    logMessage="Killing $procname with PID: $pid"
 
-    echo "Killing $procname with PID: $pid"
-    kill $pid;
+    if [ "$sendSigKill" = true ]; then
+      logMessage="Force-$logMessage"
+      killFlags="-9"
+    fi
+
+    echo "$logMessage"
+    kill "$killFlags" $pid;
   fi
 done

@@ -18,6 +18,11 @@ Simply run killport as follows:
 
 i.e. ``killport 3000``
 
+By default, killport sends each process a `SIGTERM` signal, allowing the process to gracefully terminate. 
+If you want to *forcefully* terminate the process, you can pass the `-f` option to have killport send a `SIGKILL` signal.
+
+i.e. ``killport -f 3000``
+
 ## Contributing
 
 1. Fork it!
